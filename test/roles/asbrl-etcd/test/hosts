@@ -1,0 +1,4 @@
+[etcd]
+etcd1 ansible_host=3.80.73.102 ansible_port=22 ansible_user='ubuntu' 
+etcd2 ansible_host=34.228.9.16 ansible_port=22 ansible_user='ubuntu' 
+etcd3 ansible_host=34.228.77.225 ansible_port=22 ansible_user='ubuntu' 
