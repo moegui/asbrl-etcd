@@ -11,30 +11,19 @@ Need to have Docker engine installed.
 Role Variables
 --------------
 
-- default_user: 'ubuntu'
-- ROOT_USERNAME: 'postgres'
-- ROOT_PASSWORD: 'Pa$$w0rd'
-- BUILD: '12'
-- LISTEN_ADDRESSES: '*'
-- PORT: 5432
-- MAX_CONNECTIONS: 100
-- SHARED_BUFFERS: '128MB' # 15-25% of Total RAM
-- WAL_BUFFERS: '4MB' # 3% of shared_buffers
-- EFFECTIVE_CACHE_SIZE: '512MB' # 50-75% of Total RAM.
-- WORK_MEM: '4MB' # 25% of Total RAM / max_connections
-- MAINTENANCE_WORK_MEM: '64MB' # 5% of Total RAM
-- DOCKER_NAME: 'postgres'
+- CONTAINER_NAME: etcd
+- IMAGE: bitnami/etcd
+- IMAGE_TAG: '3.4.3'
 - DOCKER_CPU_PERIOD: 0
 - DOCKER_CPU_QUOTA: 0
 - DOCKER_MEMORY: 0
 - CONTAINER_STATE: 'started'
 - VOLUME_STATE: 'present'
-- REPLICA_USERNAME: 'replica_usr'
-- REPLICA_PASSWORD: 'replica1234'
-- REPLICA_ROLE: 'NONE' # NONE/MASTER/SLAVE
-- REPLICA_SLOT: 'replicator'
-- REPLICA_SOURCE: '0.0.0.0/0'
-- REPLICA_METHOD: 'md5'
+- DOCKER_LOG_DRIVER: "json-file"
+- DOCKER_LOG_OPTIONS: "{}"
+- DOCKER_IMAGE_PUSH: false
+- CLIENT_PORT: '2379'
+- PEER_PORT: '2380'
 
 Dependencies
 ------------
@@ -44,33 +33,32 @@ None
 Example Playbook
 ----------------
 
-      - name: Deploy PostgreSQL Master
-        include_role:
-          name: asbrl-postgresql
-        vars:
-          default_user: ubuntu
-          DOCKER_NAME: pg1
-          PORT: 15432
-          ROOT_USERNAME: "postgres"
-          ROOT_PASSWORD: "1234"
-          REPLICA_ROLE: "MASTER"
-          REPLICA_USERNAME: 'replica_usr'
-          REPLICA_PASSWORD: 'replica1234'
+    - name: Run etcd1
+      include_role:
+        name: asbrl-etcd
+      vars:
+        ETCD_INITIAL_CLUSTER: etcd1=http://3.80.73.102:2380,etcd2=http://34.228.9.16:2380,etcd3=http://34.228.77.225:2380
+        ETCD_URL: http://3.80.73.102
+        ETCD_TOKEN: pgEtcdCluster1
+        ETCD_NAME: etcd1
 
-      - name: Deploy PostgreSQL Slave
-        include_role:
-          name: asbrl-postgresql
-        vars:
-          default_user: ubuntu
-          DOCKER_NAME: pg2
-          PORT: 25432
-          ROOT_USERNAME: "postgres"
-          ROOT_PASSWORD: "1234"
-          REPLICA_ROLE: "SLAVE"
-          REPLICA_MASTER_HOST: '172.17.0.1'
-          REPLICA_MASTER_PORT: 15432
-          REPLICA_USERNAME: 'replica_usr'
-          REPLICA_PASSWORD: 'replica1234'
+    - name: Run etcd2
+      include_role:
+        name: asbrl-etcd
+      vars:
+        ETCD_INITIAL_CLUSTER: etcd1=http://3.80.73.102:2380,etcd2=http://34.228.9.16:2380,etcd3=http://34.228.77.225:2380
+        ETCD_URL: http://34.228.9.16
+        ETCD_TOKEN: pgEtcdCluster1
+        ETCD_NAME: etcd2
+
+    - name: Run etcd3
+      include_role:
+        name: asbrl-etcd
+      vars:
+        ETCD_INITIAL_CLUSTER: etcd1=http://3.80.73.102:2380,etcd2=http://34.228.9.16:2380,etcd3=http://34.228.77.225:2380
+        ETCD_URL: http://34.228.77.225
+        ETCD_TOKEN: pgEtcdCluster1
+        ETCD_NAME: etcd3
 
 License
 -------
