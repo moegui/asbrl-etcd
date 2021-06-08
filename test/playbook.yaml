@@ -1,0 +1,33 @@
+---
+- name: example
+  gather_facts: true
+  hosts: "etcd"
+  order: sorted
+
+  tasks:
+    - name: Run etcd1
+      include_role:
+        name: asbrl-etcd
+      vars:
+        ETCD_INITIAL_CLUSTER: etcd1=http://3.80.73.102:2380,etcd2=http://34.228.9.16:2380,etcd3=http://34.228.77.225:2380
+        ETCD_URL: http://3.80.73.102
+        ETCD_TOKEN: pgEtcdCluster1
+        ETCD_NAME: etcd1
+
+    - name: Run etcd2
+      include_role:
+        name: asbrl-etcd
+      vars:
+        ETCD_INITIAL_CLUSTER: etcd1=http://3.80.73.102:2380,etcd2=http://34.228.9.16:2380,etcd3=http://34.228.77.225:2380
+        ETCD_URL: http://34.228.9.16
+        ETCD_TOKEN: pgEtcdCluster1
+        ETCD_NAME: etcd2
+
+    - name: Run etcd3
+      include_role:
+        name: asbrl-etcd
+      vars:
+        ETCD_INITIAL_CLUSTER: etcd1=http://3.80.73.102:2380,etcd2=http://34.228.9.16:2380,etcd3=http://34.228.77.225:2380
+        ETCD_URL: http://34.228.77.225
+        ETCD_TOKEN: pgEtcdCluster1
+        ETCD_NAME: etcd3
