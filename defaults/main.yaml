@@ -1,6 +1,6 @@
 CONTAINER_NAME: etcd
-IMAGE: bitnami/etcd
-IMAGE_TAG: '3.4.3'
+IMAGE: quay.io/coreos/etcd
+IMAGE_TAG: 'v3.4.16'
 default_user: 'ubuntu'
 DOCKER_CPU_PERIOD: 0
 DOCKER_CPU_QUOTA: 0
