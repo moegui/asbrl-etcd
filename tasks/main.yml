@@ -19,10 +19,10 @@
     cpu_period: "{{ DOCKER_CPU_PERIOD }}"
     cpu_quota: "{{ DOCKER_CPU_QUOTA }}"
     memory: "{{ DOCKER_MEMORY }}"
-    state: "{{ CONTAINER_STATE }}"   
+    state: "{{ CONTAINER_STATE }}"
     restart_policy: "unless-stopped"
     log_driver: "{{ DOCKER_LOG_DRIVER }}"
-    log_options: "{{ DOCKER_LOG_OPTIONS }}"    
+    log_options: "{{ DOCKER_LOG_OPTIONS }}"
     ports:
     -  "{{ PEER_PORT }}:2380"
     -  "{{ CLIENT_PORT }}:2379"
