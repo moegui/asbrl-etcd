@@ -13,7 +13,7 @@
   docker_container:
     name: "{{ CONTAINER_NAME }}"
     image: "{{ IMAGE }}:{{ IMAGE_TAG }}"
-    pull: "no"
+    pull: "yes"
     recreate: "yes"
     command: etcd -name {{ ETCD_NAME }}
     volumes:
