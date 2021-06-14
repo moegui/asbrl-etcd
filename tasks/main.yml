@@ -6,8 +6,6 @@
       type: none
       device: '/etcd-vol'
       o: bind
-  tags:
-  - node
 
 - name: Docker run
   when: ETCD_NAME == inventory_hostname
