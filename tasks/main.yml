@@ -65,7 +65,6 @@
     - "/etc/etcd/certs/cert.pem:/etc/etcd/certs/cert.pem"
     env:
       ETCD_ENABLE_V2: 'true'
-      ALLOW_NONE_AUTHENTICATION: 'yes'
       ETCD_NAME: "{{ ETCD_NAME }}"
       ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
       ETCD_INITIAL_ADVERTISE_PEER_URLS: "{{ ETCD_URL }}:2380"
