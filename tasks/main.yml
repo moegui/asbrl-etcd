@@ -53,8 +53,8 @@
     command: etcd -name {{ ETCD_NAME }}
     volumes:
     - "etcd-vol:{{ETCD_DATA_DIR }}"
-    - "/etc/etcd/certs/cert.key:{{ ETCD_KEY_FILE }}"
-    - "/etc/etcd/certs/cert.pem:{{ ETCD_CERT_FILE }}"
+    - "/etc/etcd/certs/cert.key:/etc/etcd/certs/cert.key"
+    - "/etc/etcd/certs/cert.pem:/etc/etcd/certs/cert.pem"
     env:
       ETCD_ENABLE_V2: 'true'
       ALLOW_NONE_AUTHENTICATION: 'yes'
@@ -66,8 +66,8 @@
       ETCD_INITIAL_CLUSTER_STATE: new
       ETCD_INITIAL_CLUSTER_TOKEN: "{{ ETCD_TOKEN }}"
       ETCD_DATA_DIR: "{{ ETCD_DATA_DIR }}"
-      ETCD_KEY_FILE: "{{ ETCD_KEY_FILE }}"
-      ETCD_CERT_FILE: "{{ ETCD_CERT_FILE }}"
+      ETCD_KEY_FILE: "/etc/etcd/certs/cert.key"
+      ETCD_CERT_FILE: "/etc/etcd/certs/cert.pem"
     cpu_period: "{{ DOCKER_CPU_PERIOD }}"
     cpu_quota: "{{ DOCKER_CPU_QUOTA }}"
     memory: "{{ DOCKER_MEMORY }}"
