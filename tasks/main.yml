@@ -18,7 +18,7 @@
   tags: asbrl-etcd
 
 - name: copy pem 
-  when: ETCD_CRT_FILE != ''
+  when: ETCD_CERT_FILE != ''
   template:
     dest: "/etc/etcd/certs/cert.pem"
     content: xxx
