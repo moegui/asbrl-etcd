@@ -8,6 +8,41 @@
       o: bind
   tags: asbrl-etcd
 
+- name: Create folder for certificates
+  file:
+    path: "/etc/etcd/certs"
+    state: directory
+    owner: root
+    group: root
+    mode: u+rwX,g+rwX,o=rX
+  tags: asbrl-etcd
+
+- name: copy pem 
+  when: ETCD_CRT_FILE != ''
+  template:
+    dest: "/etc/etcd/certs/cert.pem"
+    content: xxx
+    mode: u+rwX,g+rwX,o=rX
+  tags: asbrl-etcd
+
+- name: copy key 
+  when: ETCD_KEY_FILE != ''
+  template:
+    dest: "/etc/etcd/certs/cert.key"
+    content: xxx
+    mode: u+rwX,g+rwX,o=rX
+  tags: asbrl-etcd
+
+- name: write certificates
+  docker_volume:
+    name: 'etcd-vol'
+    state: "{{ VOLUME_STATE }}"
+    driver_options:
+      type: none
+      device: '/etcd-vol'
+      o: bind
+  tags: asbrl-etcd  
+
 - name: Docker run
   when: ETCD_NAME == inventory_hostname
   docker_container:
@@ -17,7 +52,9 @@
     recreate: "yes"
     command: etcd -name {{ ETCD_NAME }}
     volumes:
-    - etcd-vol:/etcd-data
+    - "etcd-vol:{{ETCD_DATA_DIR }}"
+    - "/etc/etcd/certs/cert.key:{{ ETCD_KEY_FILE }}"
+    - "/etc/etcd/certs/cert.pem:{{ ETCD_CERT_FILE }}"
     env:
       ETCD_ENABLE_V2: 'true'
       ALLOW_NONE_AUTHENTICATION: 'yes'
