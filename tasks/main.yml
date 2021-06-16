@@ -27,7 +27,7 @@
   tags: asbrl-etcd
 
 - name: copy pem 
-  when: ETCD_CERT_FILE != ''
+  when: ETCD_CERT_FILE is defined
   copy:
     dest: "/etc/etcd/certs/cert.pem"
     content: "{{ ETCD_CERT_FILE }}"
@@ -35,7 +35,7 @@
   tags: asbrl-etcd
 
 - name: copy key 
-  when: ETCD_KEY_FILE != ''
+  when: ETCD_KEY_FILE is defined
   copy:
     dest: "/etc/etcd/certs/cert.key"
     content: "{{ ETCD_KEY_FILE }}"
@@ -59,7 +59,7 @@
     image: "{{ IMAGE }}:{{ IMAGE_TAG }}"
     pull: "yes"
     recreate: "yes"
-    command: etcd -name {{ ETCD_NAME }}
+    command: etcd -name {{ e }}
     volumes:
     - "etcd-vol:{{ ETCD_DATA_DIR }}"
     - "/etc/etcd/certs/cert.key:/etc/etcd/certs/cert.key"
@@ -67,7 +67,7 @@
     env:
       ETCD_ENABLE_V2: 'true'
       ALLOW_NONE_AUTHENTICATION: 'yes'
-      #ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
       ETCD_INITIAL_ADVERTISE_PEER_URLS: "{{ ETCD_URL }}:2380"
       ETCD_LISTEN_CLIENT_URLS: "{{ ETCD_URL.split(':')[0] }}://0.0.0.0:2379"
       ETCD_ADVERTISE_CLIENT_URLS: "{{ ETCD_URL }}:2379"
@@ -75,8 +75,8 @@
       ETCD_INITIAL_CLUSTER_STATE: new
       ETCD_INITIAL_CLUSTER_TOKEN: "{{ ETCD_TOKEN }}"
       ETCD_DATA_DIR: "{{ ETCD_DATA_DIR }}"
-      ETCD_KEY_FILE: "/etc/etcd/certs/cert.key"
-      ETCD_CERT_FILE: "/etc/etcd/certs/cert.pem"
+      #ETCD_KEY_FILE: "/etc/etcd/certs/cert.key"
+      #ETCD_CERT_FILE: "/etc/etcd/certs/cert.pem"
     cpu_period: "{{ DOCKER_CPU_PERIOD }}"
     cpu_quota: "{{ DOCKER_CPU_QUOTA }}"
     memory: "{{ DOCKER_MEMORY }}"
