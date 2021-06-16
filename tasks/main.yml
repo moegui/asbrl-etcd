@@ -8,6 +8,15 @@
       o: bind
   tags: asbrl-etcd
 
+- name: Create folder for volume
+  file:
+    path: "/etcd-vol"
+    state: directory
+    owner: root
+    group: root
+    mode: u+rwX,g+rwX,o=rX
+  tags: asbrl-etcd
+
 - name: Create folder for certificates
   file:
     path: "/etc/etcd/certs"
