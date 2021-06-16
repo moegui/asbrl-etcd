@@ -52,7 +52,7 @@
     recreate: "yes"
     command: etcd -name {{ ETCD_NAME }}
     volumes:
-    - "etcd-vol:{{ETCD_DATA_DIR }}"
+    - "etcd-vol:{{ ETCD_DATA_DIR }}"
     - "/etc/etcd/certs/cert.key:/etc/etcd/certs/cert.key"
     - "/etc/etcd/certs/cert.pem:/etc/etcd/certs/cert.pem"
     env:
