@@ -50,7 +50,7 @@
       type: none
       device: '/etcd-vol'
       o: bind
-  tags: asbrl-etcd  
+  tags: asbrl-etcd
 
 - name: Docker run
   when: ETCD_NAME == inventory_hostname
