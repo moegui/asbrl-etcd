@@ -19,17 +19,17 @@
 
 - name: copy pem 
   when: ETCD_CERT_FILE != ''
-  template:
+  copy:
     dest: "/etc/etcd/certs/cert.pem"
-    content: xxx
+    content: "{{ ETCD_CERT_FILE }}"
     mode: u+rwX,g+rwX,o=rX
   tags: asbrl-etcd
 
 - name: copy key 
   when: ETCD_KEY_FILE != ''
-  template:
+  copy:
     dest: "/etc/etcd/certs/cert.key"
-    content: xxx
+    content: "{{ ETCD_KEY_FILE }}"
     mode: u+rwX,g+rwX,o=rX
   tags: asbrl-etcd
 
