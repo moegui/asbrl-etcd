@@ -30,6 +30,39 @@ Dependencies
 
 None
 
+Suggested setup script to create root user
+----------------
+
+# Disable Auth
+
+docker run -it --rm --network host \
+--env ALLOW_NONE_AUTHENTICATION=yes \
+quay.io/coreos/etcd:v3.4.16 etcdctl --endpoints http://some-ip:2379 user add root
+
+docker run -it --rm --network host \
+--env ALLOW_NONE_AUTHENTICATION=yes \
+quay.io/coreos/etcd:v3.4.16 etcdctl --endpoints http://some-ip:2379 role add root
+
+docker run -it --rm --network host \
+--env ALLOW_NONE_AUTHENTICATION=yes \
+quay.io/coreos/etcd:v3.4.16 etcdctl --endpoints http://some-ip:2379 role grant-permission root --prefix=true readwrite /
+
+docker run -it --rm --network host \
+--env ALLOW_NONE_AUTHENTICATION=yes \
+quay.io/coreos/etcd:v3.4.16 etcdctl --endpoints http://some-ip:2379 user grant-role root root
+
+docker run -it --rm --network host \
+--env ALLOW_NONE_AUTHENTICATION=yes \
+quay.io/coreos/etcd:v3.4.16 etcdctl --endpoints http://some-ip:2379 auth enable
+
+# Create root user for v2 API and disable guess
+
+curl --data '{"user":"root","password":"abc","roles": ["root"]}' -X PUT http://some-ip:2379/v2/auth/users/root
+curl  http://some-ip:2379/v2/auth/enable
+curl -X DELETE http://root:abc@some-ip:2379/v2/auth/enable
+curl -X PUT http://some-ip:2379/v2/auth/enable
+curl -X DELETE 'http://root:abc@some-ip:2379/v2/auth/roles/guest'
+
 Example Playbook
 ----------------
 
