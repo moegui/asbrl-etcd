@@ -26,7 +26,7 @@
     mode: u+rwX,g+rwX,o=rX
   tags: asbrl-etcd
 
-- name: copy pem 
+- name: copy pem
   when: ETCD_CERT_FILE is defined
   copy:
     dest: "/etc/etcd/certs/cert.pem"
@@ -34,7 +34,7 @@
     mode: u+rwX,g+rwX,o=rX
   tags: asbrl-etcd
 
-- name: copy key 
+- name: copy key
   when: ETCD_KEY_FILE is defined
   copy:
     dest: "/etc/etcd/certs/cert.key"
