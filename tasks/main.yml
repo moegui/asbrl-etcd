@@ -17,41 +17,6 @@
     mode: u+rwX,g+rwX,o=rX
   tags: asbrl-etcd
 
-- name: Create folder for certificates
-  file:
-    path: "/etc/etcd/certs"
-    state: directory
-    owner: root
-    group: root
-    mode: u+rwX,g+rwX,o=rX
-  tags: asbrl-etcd
-
-- name: copy pem
-  when: ETCD_CERT_FILE is defined
-  copy:
-    dest: "/etc/etcd/certs/cert.pem"
-    content: "{{ ETCD_CERT_FILE }}"
-    mode: u+rwX,g+rwX,o=rX
-  tags: asbrl-etcd
-
-- name: copy key
-  when: ETCD_KEY_FILE is defined
-  copy:
-    dest: "/etc/etcd/certs/cert.key"
-    content: "{{ ETCD_KEY_FILE }}"
-    mode: u+rwX,g+rwX,o=rX
-  tags: asbrl-etcd
-
-- name: write certificates
-  docker_volume:
-    name: 'etcd-vol'
-    state: "{{ VOLUME_STATE }}"
-    driver_options:
-      type: none
-      device: '/etcd-vol'
-      o: bind
-  tags: asbrl-etcd
-
 - name: Docker run
   when: ETCD_NAME == inventory_hostname
   docker_container:
@@ -61,8 +26,6 @@
     recreate: "yes"
     volumes:
     - "etcd-vol:{{ ETCD_DATA_DIR }}"
-    - "/etc/etcd/certs/cert.key:/etc/etcd/certs/cert.key"
-    - "/etc/etcd/certs/cert.pem:/etc/etcd/certs/cert.pem"
     env:
       ETCD_ENABLE_V2: 'true'
       ETCD_NAME: "{{ ETCD_NAME }}"
@@ -74,8 +37,6 @@
       ETCD_INITIAL_CLUSTER_STATE: new
       ETCD_INITIAL_CLUSTER_TOKEN: "{{ ETCD_TOKEN }}"
       ETCD_DATA_DIR: "{{ ETCD_DATA_DIR }}"
-      #ETCD_KEY_FILE: "/etc/etcd/certs/cert.key"
-      #ETCD_CERT_FILE: "/etc/etcd/certs/cert.pem"
     cpu_period: "{{ DOCKER_CPU_PERIOD }}"
     cpu_quota: "{{ DOCKER_CPU_QUOTA }}"
     memory: "{{ DOCKER_MEMORY }}"
